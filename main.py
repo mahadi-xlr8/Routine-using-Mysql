@@ -42,7 +42,7 @@ for i in classes:
     class_details=i
     class_on_going=i[3]
 
-
+print(class_details)
 
 
 def open_link():
@@ -51,6 +51,24 @@ def open_link():
 def moreInfo():
   return
 
+course_name=''
+teacher_name=''
+course_code=''
+class_start=''
+class_end=''
+
+if len(class_details)!=0:
+  for i in range(len(class_details)):
+    if i==2:
+      course_name=class_details[i]
+    if i==4:
+      teacher_name=class_details[i]
+    if i==5:
+      course_code=class_details[i]
+    if i==6:
+      class_start=class_details[i]
+    if i==7:
+      class_end=class_details[i]
 
 
 
@@ -65,6 +83,38 @@ def moreInfo():
 root=Tk();
 root.geometry('800x800')
 root.configure(bg='#faf598')
+root.title("Home")
+def details_window():
+  nroot=Toplevel(root)
+  nroot.title('Class Details')
+  nroot.geometry("700x500")
+  nroot.configure(bg='#faf598')
+  Label(nroot, text="Course Name:", font="Helvetica 30 bold", fg="red",bg='black').grid(row=0, column=0, padx=10, pady=10)
+  Label(nroot, text=course_name, font="Helvetica 30 bold", fg="red", bg='black').grid(row=0, column=3, padx=30,pady=10)
+  Label(nroot, text="Teacher's Name:", font="Helvetica 30 bold", fg="red",bg='black').grid(row=1, column=0, padx=10, pady=10)
+  Label(nroot, text=teacher_name, font="Helvetica 30 bold", fg="red", bg='black').grid(row=1, column=3, padx=30,pady=10)
+  Label(nroot, text="Course Code:", font="Helvetica 30 bold", fg="red",bg='black').grid(row=2, column=0, padx=10, pady=10)
+  Label(nroot, text=course_code, font="Helvetica 30 bold", fg="red", bg='black').grid(row=2, column=3, padx=30,pady=10)
+  Label(nroot, text="Start Time:", font="Helvetica 30 bold", fg="red",bg='black').grid(row=3, column=0, padx=10, pady=10)
+  Label(nroot, text=class_start, font="Helvetica 30 bold", fg="red", bg='black').grid(row=3, column=3, padx=30,pady=10)
+  Label(nroot, text="End Time:", font="Helvetica 30 bold", fg="red",bg='black').grid(row=4, column=0, padx=10, pady=10)
+  Label(nroot, text=class_end, font="Helvetica 30 bold", fg="red", bg='black').grid(row=4, column=3, padx=30,pady=10)
+
+
+def add_class():
+  return;
+
+
+def update_class():
+  return;
+
+
+def remove_class():
+  return;
+
+
+
+
 Label(root,bg='#faefcf').grid(row=0,column=0,columnspan=6)
 Label(root,text="Time:",font="Helvetica 40 bold",fg="red").grid(row=1,column=0,padx=10,pady=10)
 Label(root,text="10:00",font="Helvetica 40 bold",fg="red").grid(row=1,column=1,padx=10,pady=10)
@@ -90,9 +140,18 @@ Label(root,text=class_on_going,font="Helvetica 25 bold",fg="red").grid(row=3,col
 if class_on_going!="it's not any class time":
     Label(root, text="Class Link:", font="Helvetica 25 bold", fg="red").grid(row=4, column=0, padx=10, pady=10)
     Button(root, text="open link!", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
-           command=open_link).grid(row=4, column=1, padx=10, pady=10, columnspan=2)
+           command=open_link).grid(row=4, column=1, padx=10, pady=10, columnspan=1)
     Button(root, text="Class details", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
-           command=moreInfo).grid(row=4, column=3, padx=10, pady=10, columnspan=2)
+           command=details_window).grid(row=4, column=2, padx=10, pady=10, columnspan=2)
+
+
+Button(root, text="Add new class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
+           command=add_class).grid(row=6, column=1, padx=10, pady=10, columnspan=3)
+Button(root, text="Update Class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
+          command=update_class).grid(row=7, column=1, padx=30, pady=10, columnspan=3)
+
+Button(root, text="Delete Class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
+           command=remove_class).grid(row=8, column=1, padx=30, pady=10, columnspan=3)
 
 
 
