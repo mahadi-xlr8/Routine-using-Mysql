@@ -90,6 +90,63 @@ if len(class_details)!=0:
 
 
 
+def update_day(a,n):
+  if len(a)!=0:
+    sql="update routine set days=%s where NO = %s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_course(a,n):
+  if len(a)!=0:
+    sql="update routine set course_name=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_short(a,n):
+  if len(a)!=0:
+    sql="update routine set short_name=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_teacher(a,n):
+  if len(a)!=0:
+    sql="update routine set teacher_name=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_code(a,n):
+  if len(a)!=0:
+    sql="update routine set course_code=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_start(a,n):
+  if len(a)!=0:
+    sql="update routine set start_time=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_end(a,n):
+  if len(a)!=0:
+    sql="update routine set end_time=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+def update_meet(a,n):
+  if len(a)!=0:
+    sql="update routine set meet_link=%s where NO=%s"
+    val=(a,int(n),)
+    cursor.execute(sql,val)
+    mydb.commit()
+
+
 
 
 
@@ -99,7 +156,7 @@ if len(class_details)!=0:
 
 
 root=Tk();
-root.geometry('800x800')
+root.geometry('900x1000')
 root.configure(bg='#faf598')
 root.title("Home")
 def details_window():
@@ -245,8 +302,67 @@ def all_classes():
   Button(frame, text="Remove Data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
          command=remove_data).grid(row=3, column=5, padx=10, pady=10, columnspan=2)
 
+  Label(frame, text='NO*', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=1, padx=10, pady=10)
+  Label(frame, text='Day', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=2, padx=10, pady=10)
+  Label(frame, text='Course Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=3, padx=10, pady=10)
+  Label(frame, text='Short Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=4, padx=10, pady=10)
+  Label(frame, text='Teacher Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=5, padx=10, pady=10)
+  Label(frame, text='Course Code', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=6, padx=10, pady=10)
+  Label(frame, text='Start Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=7, padx=10, pady=10)
+  Label(frame, text='End Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=8, padx=10, pady=10)
+  Label(frame, text='Meet Link', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=9, padx=10, pady=10)
 
 
+  no_data=Entry(frame, width=10)
+  no_data.grid(row=5, column=1, padx=10, pady=10)
+  day_data = Entry(frame, width=10)
+  day_data.grid(row=5, column=2, padx=10, pady=10)
+  course_name_data = Entry(frame, width=10)
+  course_name_data.grid(row=5, column=3, padx=10, pady=10)
+  short_name_data = Entry(frame, width=10)
+  short_name_data.grid(row=5, column=4, padx=10, pady=10)
+  teacher_name_data = Entry(frame, width=10)
+  teacher_name_data.grid(row=5, column=5, padx=10, pady=10)
+
+  course_code_data = Entry(frame, width=10)
+  course_code_data.grid(row=5, column=6, padx=10, pady=10)
+
+  start_time_data = Entry(frame, width=10)
+  start_time_data.grid(row=5, column=7, padx=10, pady=10)
+
+  end_time_data = Entry(frame, width=10)
+  end_time_data.grid(row=5, column=8, padx=10, pady=10)
+  meet_link_data = Entry(frame, width=10)
+  meet_link_data.grid(row=5, column=9, padx=10, pady=10)
+
+
+
+  def temp_update_data():
+    number=no_data.get()
+    if len(number)!=0:
+      check_=True
+      for i in number:
+        if i<'0' or i>'9':
+
+          check_=False
+          break
+
+    if check_:
+     print(type(no_data.get()),no_data.get())
+     update_course(course_name_data.get(), no_data.get())
+     update_short(short_name_data.get(), no_data.get())
+     update_teacher(teacher_name_data.get(), no_data.get())
+     update_code(course_code_data.get(), no_data.get())
+     update_start(start_time_data.get(), no_data.get())
+     update_end(end_time_data.get(), no_data.get())
+     update_meet(meet_link_data.get(), no_data.get())
+     update_day(day_data.get(), no_data.get())
+    else:
+      print('invalid number!')
+
+
+  Button(frame, text="Update data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
+         command=temp_update_data).grid(row=6, column=4, padx=20, pady=10, columnspan=2)
 
 
 
