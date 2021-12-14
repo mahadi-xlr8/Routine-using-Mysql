@@ -3,6 +3,7 @@ from tkmacosx import *
 from mysql.connector import *
 from time import *
 import webbrowser as web
+from tkinter import ttk
 
 mydb = connect(
   host="localhost",
@@ -15,14 +16,31 @@ all_time=ctime().split()
 today=all_time[0]
 temp=all_time[3].split(":")
 time_now=int(temp[0])*60+int(temp[1])
-time_now=600
+#Ftime_now=600
 
+count=1
 
 point= mydb.cursor()
 
 
 point.execute("select * from routine where days Like %s",[today+'%'])
 classes=point.fetchall()
+
+cursor=mydb.cursor()
+cursor.execute('Select * from routine')
+print(cursor)
+rows=cursor.fetchall()
+total=cursor.rowcount
+print('total: '+ str(total))
+
+
+def remove_from_database(a):
+  sql = "DELETE FROM routine WHERE NO = %s"
+  adr = (a, )
+  new=mydb.cursor()
+  new.execute(sql,adr)
+  mydb.commit()
+
 
 class_now={}
 class_details=[]
@@ -43,7 +61,7 @@ for i in classes:
     class_on_going=i[3]
 
 print(class_details)
-
+print(time_slot)
 
 def open_link():
   web.open(class_now[class_on_going])
@@ -101,40 +119,166 @@ def details_window():
   Label(nroot, text=class_end, font="Helvetica 30 bold", fg="red", bg='black').grid(row=4, column=3, padx=30,pady=10)
 
 
-def add_class():
-  return;
+
+def all_classes():
+  nroot = Toplevel(root)
+  nroot.title('All Classes')
+  nroot.geometry("1200x1000")
+  nroot.configure(bg='#faf598')
+  columns=('NO','Day','Course Name','Short Name','Teacher Name',"Course Code",'Start Time',"End Time",'Meet Link')
 
 
-def update_class():
-  return;
+  temp=ttk.Treeview(nroot)
+  temp['columns']=columns
+  temp.column('#0',width=0)
+  temp.column('NO',anchor=CENTER,width=30)
+  temp.column('Day', anchor=CENTER, width=120)
+  temp.column('Course Name', anchor=CENTER, width=120)
+  temp.column('Short Name',anchor=CENTER,width=120)
+  temp.column('Teacher Name', anchor=CENTER, width=120)
+  temp.column('Course Code', anchor=CENTER, width=120)
+  temp.column('Start Time', anchor=CENTER, width=120)
+  temp.column('End Time', anchor=CENTER, width=120)
+  temp.column('Meet Link', anchor=CENTER, width=300)
 
 
-def remove_class():
-  return;
+
+
+  temp.heading('#0',text='',anchor=W)
+  temp.heading('NO', text='NO', anchor=CENTER)
+  temp.heading('Day', text='Day', anchor=CENTER)
+  temp.heading('Course Name', text='Course Name', anchor=CENTER)
+  temp.heading('Short Name', text='Short Name', anchor=CENTER)
+  temp.heading('Teacher Name', text="Teacher's Name", anchor=CENTER)
+  temp.heading('Course Code', text='Course Code', anchor=CENTER)
+  temp.heading('Start Time', text='Start Time', anchor=CENTER)
+  temp.heading('End Time', text='End Time', anchor=CENTER)
+  temp.heading('Meet Link', text='Meet Link', anchor=CENTER)
+
+  for i in rows:
+    global count
+    temp.insert('','end',iid=count,values=i)
+    count+=1
+
+  temp.pack()
+  frame = Frame(nroot)
+  frame.pack()
+
+  Label(frame, text='Day',font="Helvetica 15 bold",bg='light blue').grid(row=1,column=1,padx=10,pady=10)
+  Label(frame, text='Course Name', font="Helvetica 15 bold",bg='light blue').grid(row=1, column=2,padx=10,pady=10)
+  Label(frame, text='Short Name',font="Helvetica 15 bold",bg='light blue').grid(row=1,column=3,padx=10,pady=10)
+  Label(frame, text='Teacher Name', font="Helvetica 15 bold",bg='light blue').grid(row=1, column=4,padx=10,pady=10)
+  Label(frame, text='Course Code', font="Helvetica 15 bold", bg='light blue').grid(row=1, column=5, padx=10, pady=10)
+  Label(frame, text='Start Time', font="Helvetica 15 bold", bg='light blue').grid(row=1, column=6, padx=10, pady=10)
+  Label(frame, text='End Time', font="Helvetica 15 bold", bg='light blue').grid(row=1, column=7, padx=10, pady=10)
+  Label(frame, text='Meet Link', font="Helvetica 15 bold", bg='light blue').grid(row=1, column=8, padx=10, pady=10)
+
+
+  day_entry=Entry(frame,width=10)
+  day_entry.grid(row=2,column=1,padx=10,pady=10)
+  course_name_entry=Entry(frame,width=10)
+  course_name_entry.grid(row=2,column=2,padx=10,pady=10)
+  short_name_entry=Entry(frame,width=10)
+  short_name_entry.grid(row=2,column=3,padx=10,pady=10)
+  teacher_name_entry=Entry(frame,width=10)
+  teacher_name_entry.grid(row=2,column=4,padx=10,pady=10)
+
+  course_code_entry=Entry(frame,width=10)
+  course_code_entry.grid(row=2,column=5,padx=10,pady=10)
+
+  start_time_entry=Entry(frame,width=10)
+  start_time_entry.grid(row=2,column=6,padx=10,pady=10)
+
+  end_time_entry=Entry(frame,width=10)
+  end_time_entry.grid(row=2,column=7,padx=10,pady=10)
+  meet_link_entry=Entry(frame,width=10)
+  meet_link_entry.grid(row=2, column=8, padx=10, pady=10)
+  def add_data():
+    global total
+    total+=1
+    day=day_entry.get()
+    course=course_name_entry.get()
+    short=short_name_entry.get()
+    teacher=teacher_name_entry.get()
+    code=course_code_entry.get()
+    start_time=start_time_entry.get()
+    end_time=end_time_entry.get()
+    meet=meet_link_entry.get()
+
+    if len(day)!=0 and len(course)!=0 and len(short)!=0 and len(teacher)!=0 and len(code)!=0 and len(start_time)!=0 and len(end_time)!=0 and len(meet)!=0:
+      global count
+      temp.insert('', 'end',iid=count, values=(count,day,course,short,teacher,code,start_time,end_time,meet))
+      sql=("INSERT INTO routine (NO,days,course_name,short_name,teacher_name,course_code,start_time,end_time,meet_link) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+      value=(count,day,course,short,teacher,code,start_time,end_time,meet)
+      cursor.execute(sql,value)
+      mydb.commit()
+      print(cursor)
+      count+=1
+
+    day_entry.delete(0,END)
+    course_name_entry.delete(0,END)
+    short_name_entry.delete(0,END)
+    teacher_name_entry.delete(0,END)
+    course_code_entry.delete(0,END)
+    start_time_entry.delete(0,END)
+    end_time_entry.delete(0,END)
+    meet_link_entry.delete(0,END)
+
+
+  def remove_data():
+    global count
+    global cursor
+    x=temp.selection()[0]
+    print(x)
+    temp.delete(x)
+    remove_from_database(x)
+
+    count-=1
+
+
+
+
+
+
+  Button(frame, text="Add Data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
+         command=add_data).grid(row=3, column=2, padx=10, pady=10, columnspan=2)
+  Button(frame, text="Remove Data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
+         command=remove_data).grid(row=3, column=5, padx=10, pady=10, columnspan=2)
+
+
+
+
+
+
+
+
 
 
 
 
 Label(root,bg='#faefcf').grid(row=0,column=0,columnspan=6)
 Label(root,text="Time:",font="Helvetica 40 bold",fg="red").grid(row=1,column=0,padx=10,pady=10)
-Label(root,text="10:00",font="Helvetica 40 bold",fg="red").grid(row=1,column=1,padx=10,pady=10)
-Label(root,text="11:30",font="Helvetica 40 bold",fg="red").grid(row=1,column=2,padx=10,pady=10)
-Label(root,text="1:00",font="Helvetica 40 bold",fg="red").grid(row=1,column=3,padx=10,pady=10)
-Label(root,text="2:30",font="Helvetica 40 bold",fg="red").grid(row=1,column=4,padx=10,pady=10)
+Label(root,text="8:30",font="Helvetica 40 bold",fg="red").grid(row=1,column=1,padx=10,pady=10)
+Label(root,text="10:00",font="Helvetica 40 bold",fg="red").grid(row=1,column=2,padx=10,pady=10)
+Label(root,text="11:30",font="Helvetica 40 bold",fg="red").grid(row=1,column=3,padx=10,pady=10)
+Label(root,text="1:00",font="Helvetica 40 bold",fg="red").grid(row=1,column=4,padx=10,pady=10)
+Label(root,text="2:30",font="Helvetica 40 bold",fg="red").grid(row=1,column=5,padx=10,pady=10)
 Label(root,text="Today's class:",font="Helvetica 25 bold",fg="red").grid(row=2,column=0,padx=10,pady=10)
 
 if len(classes)==0:
   Label(root, text="there is no class today!", font="helvetica 25 bold", fg="red").grid(row=2, column=1, padx=10,pady=10, columnspan=3)
 else :
   for i in time_slot:
-    if i == 600:
+    if i==510:
       Label(root, text=time_slot[i], font="helvetica 25 bold", fg="red").grid(row=2, column=1, padx=10, pady=10)
-    elif i == 690:
+    if i == 600:
       Label(root, text=time_slot[i], font="helvetica 25 bold", fg="red").grid(row=2, column=2, padx=10, pady=10)
-    elif i == 780:
+    elif i == 690:
       Label(root, text=time_slot[i], font="helvetica 25 bold", fg="red").grid(row=2, column=3, padx=10, pady=10)
-    elif i == 870:
+    elif i == 780:
       Label(root, text=time_slot[i], font="helvetica 25 bold", fg="red").grid(row=2, column=4, padx=10, pady=10)
+    elif i == 870:
+      Label(root, text=time_slot[i], font="helvetica 25 bold", fg="red").grid(row=2, column=5, padx=10, pady=10)
 Label(root,text="Class on going:",font="Helvetica 25 bold",fg="red").grid(row=3,column=0,padx=10,pady=10)
 Label(root,text=class_on_going,font="Helvetica 25 bold",fg="red").grid(row=3,column=1,padx=10,pady=10,columnspan=3)
 if class_on_going!="it's not any class time":
@@ -145,13 +289,9 @@ if class_on_going!="it's not any class time":
            command=details_window).grid(row=4, column=2, padx=10, pady=10, columnspan=2)
 
 
-Button(root, text="Add new class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
-           command=add_class).grid(row=6, column=1, padx=10, pady=10, columnspan=3)
-Button(root, text="Update Class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
-          command=update_class).grid(row=7, column=1, padx=30, pady=10, columnspan=3)
+Button(root, text="Show Database", font="helvetica 35 bold", fg="red", bg="black", borderless=1,
+           command=all_classes).grid(row=5, column=1, padx=30, pady=10, columnspan=3)
 
-Button(root, text="Delete Class", font="helvetica 35 bold", fg="green", bg="black", borderless=1,
-           command=remove_class).grid(row=8, column=1, padx=30, pady=10, columnspan=3)
 
 
 
