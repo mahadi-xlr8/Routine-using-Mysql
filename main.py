@@ -302,67 +302,97 @@ def all_classes():
   Button(frame, text="Remove Data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
          command=remove_data).grid(row=3, column=5, padx=10, pady=10, columnspan=2)
 
-  Label(frame, text='NO*', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=1, padx=10, pady=10)
-  Label(frame, text='Day', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=2, padx=10, pady=10)
-  Label(frame, text='Course Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=3, padx=10, pady=10)
-  Label(frame, text='Short Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=4, padx=10, pady=10)
-  Label(frame, text='Teacher Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=5, padx=10, pady=10)
-  Label(frame, text='Course Code', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=6, padx=10, pady=10)
-  Label(frame, text='Start Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=7, padx=10, pady=10)
-  Label(frame, text='End Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=8, padx=10, pady=10)
-  Label(frame, text='Meet Link', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=9, padx=10, pady=10)
+  Label(frame, text='Day', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=1, padx=10, pady=10)
+  Label(frame, text='Course Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=2, padx=10, pady=10)
+  Label(frame, text='Short Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=3, padx=10, pady=10)
+  Label(frame, text='Teacher Name', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=4, padx=10, pady=10)
+  Label(frame, text='Course Code', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=5, padx=10, pady=10)
+  Label(frame, text='Start Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=6, padx=10, pady=10)
+  Label(frame, text='End Time', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=7, padx=10, pady=10)
+  Label(frame, text='Meet Link', font="Helvetica 15 bold", bg='light blue').grid(row=4, column=8, padx=10, pady=10)
 
 
-  no_data=Entry(frame, width=10)
-  no_data.grid(row=5, column=1, padx=10, pady=10)
   day_data = Entry(frame, width=10)
-  day_data.grid(row=5, column=2, padx=10, pady=10)
+  day_data.grid(row=5, column=1, padx=10, pady=10)
   course_name_data = Entry(frame, width=10)
-  course_name_data.grid(row=5, column=3, padx=10, pady=10)
+  course_name_data.grid(row=5, column=2, padx=10, pady=10)
   short_name_data = Entry(frame, width=10)
-  short_name_data.grid(row=5, column=4, padx=10, pady=10)
+  short_name_data.grid(row=5, column=3, padx=10, pady=10)
   teacher_name_data = Entry(frame, width=10)
-  teacher_name_data.grid(row=5, column=5, padx=10, pady=10)
+  teacher_name_data.grid(row=5, column=4, padx=10, pady=10)
 
   course_code_data = Entry(frame, width=10)
-  course_code_data.grid(row=5, column=6, padx=10, pady=10)
+  course_code_data.grid(row=5, column=5, padx=10, pady=10)
 
   start_time_data = Entry(frame, width=10)
-  start_time_data.grid(row=5, column=7, padx=10, pady=10)
+  start_time_data.grid(row=5, column=6, padx=10, pady=10)
 
   end_time_data = Entry(frame, width=10)
-  end_time_data.grid(row=5, column=8, padx=10, pady=10)
+  end_time_data.grid(row=5, column=7, padx=10, pady=10)
   meet_link_data = Entry(frame, width=10)
-  meet_link_data.grid(row=5, column=9, padx=10, pady=10)
+  meet_link_data.grid(row=5, column=8, padx=10, pady=10)
 
 
 
   def temp_update_data():
-    number=no_data.get()
-    if len(number)!=0:
-      check_=True
-      for i in number:
-        if i<'0' or i>'9':
+     selected = temp.focus()
+     values = temp.item(selected, 'values')
 
-          check_=False
-          break
 
-    if check_:
-     print(type(no_data.get()),no_data.get())
-     update_course(course_name_data.get(), no_data.get())
-     update_short(short_name_data.get(), no_data.get())
-     update_teacher(teacher_name_data.get(), no_data.get())
-     update_code(course_code_data.get(), no_data.get())
-     update_start(start_time_data.get(), no_data.get())
-     update_end(end_time_data.get(), no_data.get())
-     update_meet(meet_link_data.get(), no_data.get())
-     update_day(day_data.get(), no_data.get())
-    else:
-      print('invalid number!')
+     update_course(course_name_data.get(), values[0])
+     update_short(short_name_data.get(), values[0])
+     update_teacher(teacher_name_data.get(), values[0])
+     update_code(course_code_data.get(), values[0])
+     update_start(start_time_data.get(), values[0])
+     update_end(end_time_data.get(), values[0])
+     update_meet(meet_link_data.get(), values[0])
+     update_day(day_data.get(), values[0])
+
+
+
+     temp.item(selected,text='',values=(str(values[0]),day_data.get(),course_name_data.get(),short_name_data.get(),teacher_name_data.get(),course_code_data.get(),start_time_data.get(),end_time_data.get(),meet_link_data.get()))
+
+     day_data.delete(0, END)
+     course_name_data.delete(0, END)
+     short_name_data.delete(0, END)
+     teacher_name_data.delete(0, END)
+     course_code_data.delete(0, END)
+     start_time_data.delete(0, END)
+     end_time_data.delete(0, END)
+     meet_link_data.delete(0, END)
+
+  def select_data():
+    day_data.delete(0, END)
+    course_name_data.delete(0, END)
+    short_name_data.delete(0, END)
+    teacher_name_data.delete(0, END)
+    course_code_data.delete(0, END)
+    start_time_data.delete(0, END)
+    end_time_data.delete(0, END)
+    meet_link_data.delete(0, END)
+
+    selected=temp.focus()
+    values=temp.item(selected,'values')
+    day_data.insert(0,values[1])
+    course_name_data.insert(0, values[2])
+    short_name_data.insert(0, values[3])
+    teacher_name_data.insert(0, values[4])
+    course_code_data.insert(0, values[5])
+    start_time_data.insert(0, values[6])
+    end_time_data.insert(0, values[7])
+    meet_link_data.insert(0, values[8])
+
+    print(values)
+
+
 
 
   Button(frame, text="Update data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
-         command=temp_update_data).grid(row=6, column=4, padx=20, pady=10, columnspan=2)
+         command=temp_update_data).grid(row=6, column=5, padx=20, pady=10, columnspan=2)
+
+  Button(frame, text="Select Data", font="helvetica 25 bold", fg="green", bg="black", borderless=1,
+         command=select_data).grid(row=6, column=2, padx=20, pady=10, columnspan=2)
+
 
 
 
@@ -407,9 +437,6 @@ if class_on_going!="it's not any class time":
 
 Button(root, text="Show Database", font="helvetica 35 bold", fg="red", bg="black", borderless=1,
            command=all_classes).grid(row=5, column=1, padx=30, pady=10, columnspan=3)
-
-
-
 
 
 
